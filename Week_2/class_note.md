@@ -1,4 +1,4 @@
-## Two stage detection: Faster RCNN
+## Two stage detection: Fast RCNN
 ### Components:
 	0. Selective search -> ROI
 	1. Deep convNet(B1): Generate the feature map
@@ -28,7 +28,7 @@
 	4. FCs(B4): FC layers cost a lot. 
 	5. Milti-task loss: Softmax + regressor (B5)
 
-## Two stage detection: Fastest RCNN - end 2 end 
+## Two stage detection: Faster RCNN - end 2 end 
 ### Improvement
 	1. RPN: replace the selective search to generate ROI.
 		-Classification:  38 * 50 * 18 (2*9)
