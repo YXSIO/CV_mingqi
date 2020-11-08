@@ -43,7 +43,7 @@
 
 ### Components
 	1. Backbone: VGG16/ZFnet
-	2. Link/nect 
+	2. Link/neck
 	3. Heads
 
 
