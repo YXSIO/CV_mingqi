@@ -1,5 +1,5 @@
 *.DS_Store
 .class_note.md.swp
 *.pdf
-*.ipynb_checkpoints
+*/.ipynb_checkpoints
 *checkpoint.ipynb
