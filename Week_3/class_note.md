@@ -52,6 +52,7 @@ Question:
 1. confidence = P(object or not) * IOU(with groud truth). How c is calculated? The defination of C_hat is different in trainig and testing?
 2. Multi scale training: 320, 352 是对什么的描述？为什么不直接resize？
 3. How reorg is different from Pooling
+4. Pycharm or VS code, which one is better?
 
 
 
