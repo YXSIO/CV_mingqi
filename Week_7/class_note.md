@@ -14,7 +14,7 @@
 		- More robust than swish, but not beat Relu 100% times. 
 
 
-2. Loss: detection loss
+### Loss: detection loss
 	1. L1, L2, smooth L1 loss
 		- L1's gradient is constant at negative and positive segment, therefore, it is hard to converge to high accuracy.
 		- L2: Early stage is not very stable since the loss is very big.
