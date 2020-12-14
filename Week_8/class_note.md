@@ -1,4 +1,46 @@
 ## Tricks
+### Training flow chart
+    - ArgumentParser: data cfg and model cfg parser. 
+        - Initial model: model = Darknet(opt.model_def).to(device) 
+            * Create module_list = create_modules(self.module_defs): modules = nn.Sequential() Define stage
+                - "convolutional": bn, relu, conv2D
+                - "maxpool", "uppersample", "route", "shortcut"
+                - "yolo": calculate the output, loss and the encoding/decoding
+        - Load the dataset
+        	- torch.utils.data.DataLoader(dataset, batch_size=opt.batch_size, ...)
+        - Initialize the optimizer
+        	- torch.optim.Adam(model.parameters() 
+        - For each epoch:
+            - model.train()
+            - for batch_i, (_, imgs, targets) in enumerate(dataloader):
+                - Forward: loss, outputs = model(imgs, targets)    # 对应darknet中的forward: execuate stage
+                    - targets is from the dataloader
+                	- Darknet layers: 
+                		- "convolutional", "upsample", "maxpool", "route", "shortcut" :  x = module(x)  
+                		- "yolo" layers: x, layer_loss = module[0](x, targets, img_dim) 
+                    		- x.shape: b x 255 x 13 x 13 (anchor 6, 7, 8)
+                    		- compute_grid_offsets
+                       	 		- 1. 针对不同size的feature map (13x13, 26x26, 52x52), 求出不同grid的左上角坐标
+                       	 		- 2. 将(0, 416)范围的anchor scale到(0, 13)的范围
+                    		- 将prediction的x,y,w,h放到grid中: decoding - the original predicted result is between [0,1]
+                    			- Test: 进一步把prediction从grid level放到原图的尺寸
+                    			- Train: encode the loss between anchor and the ground truth.
+                    				- build target: On the grid level, for each ground truth box, find its corresponding best anchor and fill the obj_mask and non_obj_mask. encoding and using the IOU to compute the cls mask, obj mask and onn-obj mask using anchor, prediction and ground truth. 
+                    				- loss: three parts: 
+                        				- regression loss only consider the obj_mask
+                        				- conf loss consider both obj_mask and non_obj_mask
+                        				- cls loss consider only obj_mask
+                    		- Add the loss from yolo layer
+                    		- yolo_outputs.append(x)
+                    	- layer_outputs.append(x)
+                - Backward: loss.backward()
+                - Log training metrics
+            - Log validation metrics
+
+   - Notes: 
+   		- Decoding: going from [0,1] -> grid level -> image level
+   		- Encoding: imge level (image, target) -> grid level
+
 ### Acceration
 	1. Platform, pre-training and post-training
 		- Mathematical operation: addition and multiplication
@@ -40,6 +82,10 @@
 	Question: 
 	1. What is the meanning of Gamma for BN?
 	2. Why it is associated with each channel?
+	3. Forward within each class can be called implicitly? 
+	x, layer_loss = module[0](x, targets, img_dim) 
+
+	forward(self, x, targets=None, img_dim=None): The x in the forward is the input x of module or the output? And why?
 
 
 
