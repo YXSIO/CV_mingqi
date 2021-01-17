@@ -20,6 +20,17 @@
 			- Res5: self._make_layer(BasicBlock,  256, 512,  2, stride=2)
 				- BasicBlock
 
+### Improvement: SE-Net
+	- Attention: Create a new set of weights and let NN to get the attention.
+		1. Pixel wise weight
+		2. Channel wise weight
+			- Global average pooling.
+				- 1 x 1 x c -> FC -> ReLU -> FC -> Sigmoid: very similar to the bottle neck. 
+		3. SE ResNet model. 
+			- The skip connect provides the weights to the Feature map. 
+
+### Acyclic cosine annealing learing rate schedule
+	- Snapshot ensemble training. 
 
 
 
